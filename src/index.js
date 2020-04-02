@@ -1,12 +1,13 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import './index.css';
-import App from './App';
+import './index.scss';
 import * as serviceWorker from './serviceWorker';
+import ContentTemplate from './ContentTemplate.jsx';
+import AddRecipe from './AddRecipe.js';
 
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+    <ContentTemplate title="Add recipe" content={AddRecipe()} />
   </React.StrictMode>,
   document.getElementById('root')
 );

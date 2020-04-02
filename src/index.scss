@@ -1,0 +1,55 @@
+//Theming bootstrap
+
+$theme-colors: (
+  "primary": #F2639A,
+  "secondary": #8C7672,
+  "danger": #f44336,
+  "info": #8C7672,
+  "success": #63F26D,
+  "warning": #F2E77C
+);
+
+$bg-color: gray("300");
+
+$spacer: 1rem;
+$spacers: ( 0:0);
+@for $i from -10 through 150 {
+  $spacers: map-merge($spacers, (
+  $i: ($i * $spacer)
+  ));
+}
+
+
+@import "../node_modules/bootstrap/scss/bootstrap";
+
+//Custom CSS
+
+.title-center-box {  
+  text-align: center;        
+  margin: auto;    
+  margin-top: calc(-0.75em - 5rem);
+  margin-bottom: calc(5rem - 0.75em);    
+  height: 1.5em;
+  font-size: $h1-font-size;
+}
+
+.container-title {  
+  display: inline-block;     
+  padding: 0.12em;
+  padding-left: $h1-font-size;
+  padding-right: $h1-font-size; 
+  background-color: theme-color("primary");
+  color: white;
+  font-family: $btn-font-family;  
+  font-weight: $btn-font-weight;
+  //text-transform: uppercase;  
+}
+
+section.hr::before{
+  margin: 50px auto 10px;
+  content: "";
+  display: block;
+  border: 2px solid theme-color-level(primary, -10);
+}
+
+
