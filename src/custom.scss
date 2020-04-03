@@ -1,0 +1,23 @@
+//Theming bootstrap
+
+$theme-colors: (
+  "primary": #F2639A,
+  "secondary": #8C7672,
+  "danger": #f44336,
+  "info": #8C7672,
+  "success": #63F26D,
+  "warning": #F2E77C
+);
+
+$bg-color: gray("300");
+
+$spacer: 1rem;
+$spacers: ( 0:0);
+@for $i from -10 through 150 {
+  $spacers: map-merge($spacers, (
+  $i: ($i * $spacer)
+  ));
+}
+
+
+@import "~bootstrap/scss/bootstrap";
