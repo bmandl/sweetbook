@@ -1,33 +1,33 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Form, Button } from 'react-bootstrap';
+import {useInputChange} from './InputHandlers';
 
-function createFormGroupArray() {
-
-    let groupParameters = Array.from(arguments);
-    let groupArray = [];
-    groupParameters.forEach(obj => {
-        groupArray.push(
-            <>
-                <Form.Group controlId={obj.id}>
-                    <Form.Label>{obj.label}</Form.Label>
-                    <Form.Control as={obj.control.as} type={obj.control.type} />
-                </Form.Group>
-                {obj.button &&
-                    <Button name={obj.button.name} variant={obj.button.variant}>
-                        {obj.button.text}
-                    </Button>
-                }
-            </>
-        )
-    })
-
-    return groupArray;
+function FormGroupArray(props) {
+    //controlled input
+    const [input, handleInputChange] = useInputChange();
+    //for each parameter object which represents a FormGroup
+    //array of FormGroups
+    return props.groups.map(obj =>
+        <>
+            <Form.Group controlId={obj.id}>
+                <Form.Label>{obj.label}</Form.Label>
+                <Form.Control as={obj.control.as} type={obj.control.type} onChange={handleInputChange} />
+            </Form.Group>
+            {obj.button &&  //Button is optional
+                <Button name={obj.button.name} variant={obj.button.variant}>
+                    {obj.button.text}
+                </Button>
+            }
+        </>
+    )
 }
 
-const AddRecipe = () => {
+const AddRecipe = () => {    
+    //controlled input
+    const [input, handleInputChange] = useInputChange()
     return (
         <>
-            {createFormGroupArray(
+            <FormGroupArray groups={[
                 {
                     id: "title",
                     label: "Title:",
@@ -37,11 +37,13 @@ const AddRecipe = () => {
                     id: "brief",
                     label: "Brief description:",
                     control: { as: "textarea" }
-                })}
+                }
+            ]}
+            />
 
             <section class="hr">
                 <h2>Ingredients</h2>
-                {createFormGroupArray(
+                <FormGroupArray groups={[
                     {
                         id: "name",
                         label: "Name:",
@@ -58,21 +60,22 @@ const AddRecipe = () => {
                         control: { as: "select" },
                         button: { name: "addIngredient", variant: "primary", text: "Add ingredient" }
                     }
-                )}
+                ]}
+                />
             </section>
 
             <section class="hr">
-                <h2>Preparation</h2>                
+                <h2>Preparation</h2>
                 <Form.Group controlId="step">
                     <Form.Label>Step:</Form.Label>
-                    <Form.Control as="input" type="text" />                    
+                    <Form.Control as="input" type="text" name="step" onChange={handleInputChange} />
                 </Form.Group>
                 <Button name="addStep" variant="primary">Add step</Button>
             </section>
 
             <section class="hr">
                 <h2>Details</h2>
-                {createFormGroupArray(
+                <FormGroupArray groups={[
                     {
                         id: "type",
                         label: "Type:",
@@ -98,14 +101,15 @@ const AddRecipe = () => {
                         label: "Dietary consideration:",
                         control: { as: "input", type: "text" }
                     }
-                )}
+                ]}
+                />
             </section>
 
             <section class="hr">
                 <h2>Notes</h2>
                 <Form.Group>
                     <Form.Label for="notes"></Form.Label>
-                    <Form.Control as="textarea" id="notes" name="notes"></Form.Control>
+                    <Form.Control as="textarea" id="notes" name="notes" onChange={handleInputChange} />
                 </Form.Group>
             </section>
         </>

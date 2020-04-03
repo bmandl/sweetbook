@@ -7,7 +7,7 @@ import AddRecipe from './AddRecipe.js';
 
 ReactDOM.render(
   <React.StrictMode>
-    <ContentTemplate title="Add recipe" content={AddRecipe()} />
+    <ContentTemplate title="Add recipe" content={<AddRecipe />} />
   </React.StrictMode>,
   document.getElementById('root')
 );
