@@ -2,9 +2,10 @@ import React from 'react';
 import { Form, Button } from 'react-bootstrap';
 
 function createFormGroupArray() {
-
+    //create array from function parameters
     let groupParameters = Array.from(arguments);
     let groupArray = [];
+    //for each parameter object which represents a FormGroup
     groupParameters.forEach(obj => {
         groupArray.push(
             <>
@@ -12,7 +13,7 @@ function createFormGroupArray() {
                     <Form.Label>{obj.label}</Form.Label>
                     <Form.Control as={obj.control.as} type={obj.control.type} />
                 </Form.Group>
-                {obj.button &&
+                {obj.button &&  //Button is optional
                     <Button name={obj.button.name} variant={obj.button.variant}>
                         {obj.button.text}
                     </Button>
@@ -20,7 +21,7 @@ function createFormGroupArray() {
             </>
         )
     })
-
+    //array of FormGroups
     return groupArray;
 }
 
