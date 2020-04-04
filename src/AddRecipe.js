@@ -1,12 +1,12 @@
-import React, { useState, useReducer } from 'react';
+import React, { useReducer } from 'react';
 import { Form, Button, ListGroup } from 'react-bootstrap';
-import { useInputChange, reducer } from './InputHandlers';
+import { reducer, itemReducer } from './InputHandlers';
 
 function FormGroupArray(props) {
     //for each parameter object which represents a FormGroup
     //array of FormGroups    
-    return props.groups.map(obj =>
-        <>
+    return props.groups.map((obj, index) =>
+        <React.Fragment key={"frag" + index}>
             <Form.Group controlId={obj.id}>
                 <Form.Label>{obj.label}</Form.Label>
                 <Form.Control
@@ -22,12 +22,12 @@ function FormGroupArray(props) {
                     {obj.button.text}
                 </Button>
             }
-        </>
+        </React.Fragment>
     )
 }
 
 const AddRecipe = () => {
-    //controlled input
+    //controlled inputs
     const initialState = {
         title: '',
         brief: '',
@@ -44,32 +44,62 @@ const AddRecipe = () => {
     };
 
     const [input, dispatch] = useReducer(reducer, initialState);
-    const [ingredients, addIngredient] = useState([]);
+    const [ingredients, updateIngredients] = useReducer(itemReducer, []);
+    const [steps, updateSteps] = useReducer(itemReducer, []);
 
     const handleChange = e => {
         dispatch({ field: e.target.name, value: e.target.value })
     }
 
+    const addItem = ({ input, value }) => {
+        //add list item with input field value  
+        let action = { type: 'add', payload: <ListGroup.Item onClick={removeItem}>{value}</ListGroup.Item> };
+        switch (input) {
+            case 'ingredient':
+                updateIngredients(action)
+                break;
+            case 'step':
+                updateSteps(action)
+                break;
+        }
+        //clear input field
+        dispatch({ field: input, value: '' })
+    }
+
+    const removeItem = (e) => {
+        //remove list item upon click on
+        let action = { type: 'remove', payload: e.currentTarget.textContent };
+        switch (e.target.parentNode.id) {
+            case 'ingredientsList':
+                updateIngredients(action)
+                break
+            case 'stepsList':
+                updateSteps(action)
+                break
+        }
+
+    }
+
     const { title, brief, ingredient, quantity, unit, step, type, main, occasion, method, diet, notes } = input;
 
     return (
-        <>
+        <Form>
             <FormGroupArray groups={
                 [
                     {
                         id: "title",
                         label: "Title:",
-                        control: { as: "input", type: "text" }
+                        control: { as: "input", type: "text", value: title, handleChange: handleChange }
                     },
                     {
                         id: "brief",
                         label: "Brief description:",
-                        control: { as: "textarea" }
+                        control: { as: "textarea", value: brief, handleChange: handleChange }
                     }
                 ]}
             />
 
-            <section class="hr">
+            <section className="hr">
                 <h2>Ingredients</h2>
                 <FormGroupArray groups={
                     [
@@ -86,70 +116,71 @@ const AddRecipe = () => {
                         {
                             id: "unit",
                             label: "Unit:",
-                            control: { as: "select" },
+                            control: { as: "select", value: unit, handleChange: handleChange },
                             button: {
                                 name: "addIngredient", variant: "primary", text: "Add ingredient",
-                                clickAction: () => addIngredient([...ingredients,
-                                <ListGroup.Item>- {quantity} {unit} {ingredient}</ListGroup.Item>])
+                                clickAction: () => addItem({ input: "ingredient", value: ingredient })
                             }
                         }
                     ]}
                 />
                 {ingredients &&
-                    <ListGroup as="ul">{ingredients}</ListGroup>
+                    <ListGroup as="ul" id="ingredientsList">{ingredients}</ListGroup>
                 }
             </section>
 
-            <section class="hr">
+            <section className="hr">
                 <h2>Preparation</h2>
                 <Form.Group controlId="step">
                     <Form.Label>Step:</Form.Label>
-                    <Form.Control as="input" type="text" name="step" onChange={handleChange} />
+                    <Form.Control as="input" type="text" name="step" value={step} onChange={handleChange} />
                 </Form.Group>
-                <Button name="addStep" variant="primary">Add step</Button>
+                <Button name="addStep" variant="primary" onClick={() => addItem({ input: "step", value: step })}>Add step</Button>
+                {steps &&
+                    <ListGroup as="ul" id="stepsList">{steps}</ListGroup>
+                }
             </section>
 
-            <section class="hr">
+            <section className="hr">
                 <h2>Details</h2>
                 <FormGroupArray groups={
                     [
                         {
                             id: "type",
                             label: "Type:",
-                            control: { as: "input", type: "text" }
+                            control: { as: "input", type: "text", value: type, handleChange: handleChange }
                         },
                         {
                             id: "main",
                             label: "Main ingredient(s):",
-                            control: { as: "input", type: "text" }
+                            control: { as: "input", type: "text", value: main, handleChange: handleChange }
                         },
                         {
                             id: "occasion",
                             label: "Season/Ocasion:",
-                            control: { as: "input", type: "text" }
+                            control: { as: "input", type: "text", value: occasion, handleChange: handleChange }
                         },
                         {
                             id: "method",
                             label: "Preparation method:",
-                            control: { as: "input", type: "text" }
+                            control: { as: "input", type: "text", value: method, handleChange: handleChange }
                         },
                         {
                             id: "diet",
                             label: "Dietary consideration:",
-                            control: { as: "input", type: "text" }
+                            control: { as: "input", type: "text", value: diet, handleChange: handleChange }
                         }
                     ]}
                 />
             </section>
 
-            <section class="hr">
+            <section className="hr">
                 <h2>Notes</h2>
-                <Form.Group>
-                    <Form.Label for="notes"></Form.Label>
-                    <Form.Control as="textarea" id="notes" name="notes" onChange={handleChange} />
+                <Form.Group controlId="notes">
+                    <Form.Control as="textarea" value={notes} onChange={handleChange} />
                 </Form.Group>
             </section>
-        </>
+        </Form>
     )
 }
 

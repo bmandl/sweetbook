@@ -17,3 +17,16 @@ export function reducer(state, { field, value }) {
         [field]: value
     }
 }
+
+export function itemReducer(items, action) {
+    switch (action.type) {
+        case 'add':
+            return [...items, action.payload];
+        case 'remove':
+            let arr = [...items];
+            let index = arr.findIndex(el => el.props.children == action.payload);
+            arr.splice(index, 1);
+            
+            return arr;
+    }
+}
