@@ -1,12 +1,19 @@
 import { useState } from 'react'
 
 export const useInputChange = () => {
-  const [input, setInput] = useState({})
+    const [input, setInput] = useState({})
 
-  const handleInputChange = (e) => setInput({
-    ...input,
-    [e.currentTarget.name]: e.currentTarget.value
-  })
+    const handleInputChange = (e) => setInput({
+        ...input,
+        [e.currentTarget.name]: e.currentTarget.value
+    })
 
-  return [input, handleInputChange]
+    return [input, handleInputChange]
+}
+
+export function reducer(state, { field, value }) {
+    return {
+        ...state,
+        [field]: value
+    }
 }

@@ -1,6 +1,6 @@
 {
-  "short_name": "React App",
-  "name": "Create React App Sample",
+  "short_name": "Sweetbook",
+  "name": "Recipe book for desserts - Sweetbook",
   "icons": [
     {
       "src": "favicon.ico",
