@@ -24,9 +24,10 @@ export function itemReducer(items, action) {
             return [...items, action.payload];
         case 'remove':
             let arr = [...items];
-            let index = arr.findIndex(el => el.props.children == action.payload);
+            let index = arr.findIndex(el => el.props.children === action.payload);
             arr.splice(index, 1);
-            
             return arr;
+        default:
+            throw(Error);            
     }
 }
