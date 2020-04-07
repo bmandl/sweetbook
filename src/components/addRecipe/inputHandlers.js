@@ -1,5 +1,9 @@
 import { useState } from 'react'
 
+export function init(initialState){
+    return initialState;
+}
+
 export const useInputChange = () => {
     const [input, setInput] = useState({})
 
@@ -11,7 +15,8 @@ export const useInputChange = () => {
     return [input, handleInputChange]
 }
 
-export function reducer(state, { field, value }) {
+export function reducer(state, { field, value, type }) {
+    if (type === 'reset') return init(value)
     return {
         ...state,
         [field]: value
@@ -27,7 +32,9 @@ export function itemReducer(items, action) {
             let index = arr.findIndex(el => el.props.children === action.payload);
             arr.splice(index, 1);
             return arr;
+        case 'reset':
+            return [];
         default:
-            throw(Error);            
+            throw (Error);
     }
 }

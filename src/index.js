@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import './index.scss';
 import * as serviceWorker from './serviceWorker';
 import ContentTemplate from './ContentTemplate.jsx';
-import AddRecipe from './AddRecipe.js';
+import AddRecipe from './components/addRecipe';
 
 ReactDOM.render(
   <React.StrictMode>
